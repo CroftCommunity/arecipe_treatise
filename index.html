@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>arecipe — the recipe box that cannot turn on you</title>
+  <meta name="description" content="arecipe is a small recipe app built as a working argument: that the slow decay of beloved software is a design outcome, and a different design resists it.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="wordmark" href="https://croft.ing/">CROFT<span class="tld">.ing</span></a>
+    <a class="guide" href="https://croft.ing/arecipe/">The user guide</a>
+  </header>
+
+  <main class="wrap">
+    <p class="kicker">A CROFT FIELD REPORT</p>
+
+    <h1>The recipe box that cannot turn on you</h1>
+
+    <p class="lede">arecipe is a small recipe app built as a working argument: that the slow decay of beloved software is, in large part, a design outcome, and that a different design makes software structurally resistant to it.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act I. A short story you already know</h2>
+
+    <p>A recipe app launches. It is fast, kind, and free, and you pour a decade of family recipes into it. It gets popular, then acquired. Ads arrive in the search results, then between your own recipes. The features you rely on drift one by one behind a subscription, or more likely only ever launch behind one. The export button technically exists and half works. Eventually a sunset notice thanks you for being part of the journey, and the recipes you transcribed one winter to share with your family are now, and it becomes clear always were, under the custody of a third party.</p>
+
+    <p>Nobody in that story need be a villain for it to be true. Cory Doctorow named the pattern enshittification (ENS from here on, and across Croft's pages): a platform is good to its users until they are locked in, then value is clawed back, stage by stage, because the operator answers to someone other than the users. The word is crude; the mechanism is not. It is structural, which is, maybe unexpectedly, a reason for hope: structures can be refused.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act II. The four preconditions</h2>
+
+    <p>arecipe's design docs distill ENS into four structural preconditions. Call them unilateral control, lock-in, the data asset, and captive network effects. The decay needs all four: an operator with unilateral control over how the platform behaves; data lock-in that makes leaving expensive; the users' aggregated data held as a proprietary asset; and network effects that make individual defection irrational, because leaving means leaving everyone.</p>
+
+    <p>Remove any one and the pattern stalls. Remove all four and it cannot begin. arecipe removes all four.</p>
+
+    <p><strong>No unilateral control.</strong> An operator exists: someone owns the domain, maintains the code, signs releases. But the levers are minimum-authority, and anything the operator publishes, users can decline.</p>
+
+    <p><strong>No lock-in.</strong> Recipes are records in your own data store on the AT Protocol, in an open schema. Any conforming app renders them. The proof is live, not promised: the same records already appear on recipe.exchange, a separate project, with no coordination between the two. And the data store itself may be hosted by Bluesky, or by you and your community; that is a personal choice.</p>
+
+    <p><strong>No data asset.</strong> The application holds nothing. No database, no user table, no analytics. There is nothing to monetize because there is nothing there.</p>
+
+    <p><strong>No captive network effects.</strong> Your people are your Bluesky graph, not an arecipe roster. Adopt a competing app and your recipes, your follows, and your moderation choices can all come with you.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act III. The shape: a PWA with no back half</h2>
+
+    <p>Two terms, then what they mean here. A single-page application (SPA) is an app that runs entirely in your browser as scripts and pages, rather than asking a server to think for it. A progressive web app (PWA) is a website that your phone or desktop can install and treat like a native app: an icon, an offline shell, a full window. arecipe is both, and the mix is the point: SPA means all the logic ships to you and runs on your device; PWA means it feels like an app worth living in.</p>
+
+    <p>What arecipe deliberately is not, is served. There is no application server anywhere: the whole app is a static bundle of files, built in the open and hosted as plain pages. Each destination is its own document rather than one mega-app with a router, so the surface area stays small and legible. Your browser talks directly to your own data store; nothing of yours passes through an arecipe machine, because there isn't one.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act IV. Security, honestly</h2>
+
+    <p>No server means no server to breach and no password database to leak, and it also means every defense must ship inside the pages themselves. Sign-in is the network's own OAuth, run entirely in the browser, and the resulting credentials are sender-constrained: a stolen token is inert off the device it belongs to, because using it requires a proof signed by a key that never leaves that device.</p>
+
+    <p>That moves the realistic threat to one place: malicious script running inside the app's own origin. So that is where the security budget goes: a strict content-security policy carried in every document, integrity hashes on the code the pages load, zero third-party scripts, and a build gate that loads every page under the enforced policy and refuses to ship on any violation.</p>
+
+    <p>And the honest residuals, stated rather than hidden: a fully compromised device is out of scope for any browser app, and script that does get inside the origin could use keys in place even though it cannot steal them. The controls shrink that surface; nothing reduces it to zero, and a page that claimed zero would be exhibiting the exact confidence this project exists to refuse.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act V. What you actually get</h2>
+
+    <p>Practically, here is what the architecture gives you. Your recipes render in other apps today, so exit is a live demonstration, not a clause in a promise. The app <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Installing">installs like any other</a> and works installed or not, public meal-plan links included, and an opt-in step publishes your plan as a calendar feed your household can subscribe to. There are no ads and there never can be, not as policy but as plumbing: there is no data to target with and no chokepoint to rent. And the project's ambition is deliberately countercultural: reach a good interface, then let it be. Software that is not trying to extract value has no motivation to churn the interface out from under you.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>Act VI. What this does not claim</h2>
+
+    <p>Bounded claims are the whole posture, so here are the bounds. This design does not resist an author walking away; abandoned software stays abandoned. It does not resist a court order against the domain; the frontend would end, though the records would survive. Public records can be indexed by anyone, which is the price of credible exit. And the largest honest residual is governance: one person still owns the domain, holds the signing key, and decides what ships. That is not ENS, since there is no data, rent, or chokepoint to extract through, but it is concentrated authority, and the design keeps the door open to sharing it out over time.</p>
+
+    <hr class="course" aria-hidden="true">
+
+    <h2>The gate</h2>
+
+    <p class="gate-lead">The app, the guide, the ground, and the source.</p>
+
+    <ul>
+      <li>The app itself: <a href="https://arecipe.app">https://arecipe.app</a></li>
+      <li>The user guide: <a href="https://croft.ing/arecipe/">https://croft.ing/arecipe/</a></li>
+      <li>The homestead this grows on: <a href="https://croft.ing">https://croft.ing</a></li>
+      <li>Source, philosophy, security posture, in full: <a href="https://github.com/CroftCommunity/arecipe">https://github.com/CroftCommunity/arecipe</a></li>
+      <li>The same recipes, rendered elsewhere: <a href="https://recipe.exchange">https://recipe.exchange</a></li>
+    </ul>
+
+    <p class="signoff"><em>arecipe: the a is for Amanda</em></p>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p>Croft is built in the open. <a href="https://github.com/CroftCommunity/arecipe_treatise">Site source</a> &middot; <a href="https://github.com/CroftCommunity/arecipe">The app source</a></p>
+    <p>AGPL-3.0. No cookies, no scripts, no tracking.</p>
+  </footer>
+</body>
+</html>
